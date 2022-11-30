@@ -1,0 +1,22 @@
+version: 2
+registries:
+  fast-npm:
+    type: npm-registry
+    url: 'https://fast.cloud.scout24.com/artifactory/api/npm/npm'
+    username: ${{secrets.DEPENDABOT_FAST_USER}}
+    password: ${{secrets.DEPENDABOT_FAST_PASS}}
+
+updates:
+  # <> CDK Start <>
+  - package-ecosystem: 'npm'
+    directory: '/deploy/cdk'
+    registries:
+      - 'fast-npm'
+    schedule:
+      interval: 'daily'
+    # only open one PR a day, keeps your CI happy. Remember: whenever a PR is merged, all the others will start rebasing
+    open-pull-requests-limit: 1
+    # make sure these labels exist before you specify them here - fully optional, you could also omit this option
+    labels:
+      - 'dependencies'
+      - 'cdk'
